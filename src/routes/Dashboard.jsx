@@ -32,7 +32,7 @@ export default function Dashboard() {
       const destCoords = await geocodeAddress(search)
       const userLoc = currentLocation || await getCurrentLocation()
       const [lat, lng] = userLoc
-      const osrmDest = [destCoords[1], destCoords[0]]
+      const osrmDest = destCoords
       const rawRoutes = await getRoutes([lng, lat], osrmDest)
       const formattedRoutes = rawRoutes.map(r => ({
         ...r,
@@ -87,7 +87,7 @@ export default function Dashboard() {
     setDataLoading(true);
     try {
       const [lat, lng] = currentLocation;
-      const osrmDest = [defaultDestination[1], defaultDestination[0]];
+      const osrmDest = [-122.1430, 37.4419]; // Stanford lng, lat
       const rawRoutes = await getRoutes([lng, lat], osrmDest);
       const formattedRoutes = rawRoutes.map(r => ({
         ...r,

@@ -9,12 +9,13 @@ if (!mapboxgl.accessToken || mapboxgl.accessToken === 'pk.eyJ1IjoiZGVmYXVsdCIsIm
   console.warn('Mapbox token missing! Add to .env.local')
 }
 
-const mapboxClient = new mapboxgl.Directions()
+// const mapboxClient = new mapboxgl.Directions() // Not used; Directions lib not imported
 
 export async function getRoutes(start, end) {
   try {
     const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?alternatives=true&geometries=geojson&access_token=${mapboxgl.accessToken}`)
     const data = await response.json()
+    if (!data.routes || data.routes.length === 0) return [];
     return data.routes.map(route => ({
       distance: route.distance,
       duration: route.duration,
@@ -36,6 +37,6 @@ export async function getUserLocation() {
   })
 }
 
-export { mapboxgl, mapboxClient }
+export { mapboxgl }
 export default mapboxgl
 
