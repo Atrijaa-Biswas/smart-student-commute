@@ -2,6 +2,9 @@
 
 A smart web application that helps students avoid crowded routes and travel efficiently using real-time data.
 
+## Live Deployment:
+https://smartstudentcommute.vercel.app/
+
 ---
 
 ## 📌 Problem
