@@ -5,7 +5,7 @@ import polyline from '@mapbox/polyline'
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
 
 // Check token
-if (!mapboxgl.accessToken || mapboxgl.accessToken === 'pk.eyJ1IjoiZGVmYXVsdCIsImEiOiJjbGI5d3h4cDAwMWU1M2pxeWQ2M3k0YzA5In0.dQw4w9WgXcQ') {
+if (!mapboxgl.accessToken || mapboxgl.accessToken === VITE_MAPBOX_TOKEN) {
   console.warn('Mapbox token missing! Add to .env.local')
 }
 
