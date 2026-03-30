@@ -42,7 +42,7 @@ export function getRoutes(start, end) {
   return fetch(osrmUrl)
     .then(res => res.json())
     .then(data => data.routes.map(route => ({
-      distance: route.distance / 1000,
+      distance: route.distance,
       duration: route.duration / 60,
       geometry: route.geometry.coordinates,
       traffic: Math.random() > 0.7 ? 'high' : Math.random() > 0.4 ? 'medium' : 'low' // Simulate
