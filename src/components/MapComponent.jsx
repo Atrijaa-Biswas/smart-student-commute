@@ -12,21 +12,28 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
 })
 
-export default function MapComponent({ routes = [], destination, className = 'w-full h-[500px] rounded-3xl shadow-2xl' }) {
+export default function MapComponent({ routes = [], destination, currentLocation, selectedRouteIndex = -1, className = 'w-full h-[500px] rounded-3xl shadow-2xl' }) {
   const [currentPosition, setCurrentPosition] = useState([37.7749, -122.4194])
   const [isLoading, setIsLoading] = useState(true)
 
+  const position = currentLocation || currentPosition
+
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const coords = [pos.coords.latitude, pos.coords.longitude]
-        setCurrentPosition(coords)
-        setIsLoading(false)
-      },
-      () => setIsLoading(false),
-      { enableHighAccuracy: true }
-    )
-  }, [])
+    if (currentLocation) {
+      setCurrentPosition(currentLocation)
+      setIsLoading(false)
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = [pos.coords.latitude, pos.coords.longitude]
+          setCurrentPosition(coords)
+          setIsLoading(false)
+        },
+        () => setIsLoading(false),
+        { enableHighAccuracy: true }
+      )
+    }
+  }, [currentLocation])
 
   const getTrafficColor = (traffic) => {
     switch (traffic) {
@@ -42,8 +49,8 @@ export default function MapComponent({ routes = [], destination, className = 'w-
       key={`route-${index}`}
       positions={route.geometry}
       color={getTrafficColor(route.traffic)}
-      weight={6 + index}
-      opacity={0.8}
+      weight={selectedRouteIndex === index ? 12 : 5 + index}
+      opacity={selectedRouteIndex === index ? 1 : 0.8}
     />
   ))
 
@@ -57,7 +64,7 @@ export default function MapComponent({ routes = [], destination, className = 'w-
 
   return (
     <MapContainer 
-      center={currentPosition} 
+      center={position} 
       zoom={12} 
       className={className}
       scrollWheelZoom={true}
@@ -72,7 +79,7 @@ export default function MapComponent({ routes = [], destination, className = 'w-
       {routeLines}
 
       {/* Current Location Marker */}
-      <Marker position={currentPosition}>
+      <Marker position={position}>
         <Popup>
           <div className="font-bold text-commute-green">Your Location</div>
         </Popup>
